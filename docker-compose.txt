@@ -1,0 +1,29 @@
+version: '3.8'  # Adjust the version according to your Docker Compose version compatibility
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - frontend-backend-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://admin:password@mongo:27017/user-account?authSource=admin
+    networks:
+      - frontend-backend-network
+
+
+networks:
+  frontend-backend-network:
+    driver: bridge
